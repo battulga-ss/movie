@@ -1,16 +1,16 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import MoviesPage from "@/pages/movies/MoviesPage"
-import MovieDetailPage from "@/pages/movies/MovieDetailPage"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import MoviesPage from "@/pages/movies/MoviesPage";
+import MovieDetailPage from "@/pages/movies/MovieDetailPage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5,
-      retry: 1,
-    },
-  },
-})
+      retry: 1
+    }
+  }
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -21,6 +21,6 @@ const App = () => (
       </Routes>
     </BrowserRouter>
   </QueryClientProvider>
-)
+);
 
-export default App
+export default App;

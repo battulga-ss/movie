@@ -1,5 +1,5 @@
-import { MoviesView } from "@/modules/movies/components/MoviesView"
+import { MoviesView } from "@/modules/movies/components/MoviesView";
 
-const MoviesPage = () => <MoviesView />
+const MoviesPage = () => <MoviesView />;
 
-export default MoviesPage
+export default MoviesPage;

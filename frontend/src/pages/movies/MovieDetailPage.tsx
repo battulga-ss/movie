@@ -1,5 +1,5 @@
-import { MovieDetailView } from "@/modules/movies/components/MovieDetailView"
+import { MovieDetailView } from "@/modules/movies/components/MovieDetailView";
 
-const MovieDetailPage = () => <MovieDetailView />
+const MovieDetailPage = () => <MovieDetailView />;
 
-export default MovieDetailPage
+export default MovieDetailPage;
