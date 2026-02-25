@@ -6,7 +6,9 @@ import moviesRouter from "./routes/movies";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || "";
+const MONGODB_URI =
+  process.env.MONGODB_URI ||
+  "mongodb+srv://blessyou100x_db_user:INXFlzZtwh8J1AsE@backend.b2ndaz2.mongodb.net/sample_mflix?appName=backend-lesson";
 
 app.use(cors());
 app.use(express.json());
