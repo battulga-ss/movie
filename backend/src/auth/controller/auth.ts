@@ -4,7 +4,11 @@ export const meController = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const user = undefined;
+  const authHeader = req.headers["authorization"];
 
-  res.json(user);
+  if (authHeader) {
+    res.json({ user: { id: 123 } });
+  } else {
+    res.json(undefined);
+  }
 };

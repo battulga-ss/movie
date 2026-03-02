@@ -7,6 +7,7 @@ interface IAuthContextValue {
 
   login: () => void;
   logout: () => void;
+  isLoading: boolean;
 }
 
 export const AuthContext = createContext<IAuthContextValue | null>(null);
