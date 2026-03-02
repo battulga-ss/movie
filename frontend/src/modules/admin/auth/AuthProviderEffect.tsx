@@ -1,9 +1,12 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useUser } from "./useAuthContext";
 
 export const AuthProvderEffect = () => {
-  const user = true;
+  const user = useUser();
 
-  if (user) {
+  console.log(user);
+
+  if (user?.id) {
     return <Outlet />;
   }
 
