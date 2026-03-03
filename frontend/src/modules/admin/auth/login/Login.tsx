@@ -2,11 +2,12 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../useAuthContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import * as z from "zod";
 import type { SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLogin } from "../hooks/useLogin";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
 const userFormSchema = z.object({
   email: z.email(),
@@ -16,11 +17,7 @@ const userFormSchema = z.object({
 export const Login = () => {
   const { user } = useAuth();
   const { mutate } = useLogin();
-  const {
-    handleSubmit,
-    register,
-    formState: { errors }
-  } = useForm<z.infer<typeof userFormSchema>>({
+  const form = useForm<z.infer<typeof userFormSchema>>({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
       email: "example@gmail.com",
@@ -37,12 +34,47 @@ export const Login = () => {
   };
 
   return (
-    <div className="w-full">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Input type="email" {...register("email")} />
+    <div className="max-w-lg">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <Controller
+          name="email"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Bug Title</FieldLabel>
+              <Input
+                {...field}
+                id={field.name}
+                aria-invalid={fieldState.invalid}
+                placeholder="Enter your email"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
+        <Controller
+          name="password"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Bug Title</FieldLabel>
+              <Input
+                {...field}
+                id={field.name}
+                aria-invalid={fieldState.invalid}
+                placeholder="password"
+                type="password"
+              />
+
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        {/* <Input type="email" {...register("email")} />
 
         <Input type="password" {...register("password")} />
-        {errors.password && <p>{errors.password.message}</p>}
+        {errors.password && <p>{errors.password.message}</p>} */}
         <Button type="submit" variant={"outline"}>
           Login
         </Button>
