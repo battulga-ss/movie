@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../useAuthContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="max-w-lg">
+    <div className="max-auto">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Controller
           name="email"
@@ -78,6 +78,9 @@ export const Login = () => {
         <Button type="submit" variant={"outline"}>
           Login
         </Button>
+        <Link to="/admin/signup">
+          <Button variant={"outline"}>Sign Up</Button>
+        </Link>
       </form>
     </div>
   );
