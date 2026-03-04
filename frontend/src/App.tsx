@@ -8,6 +8,7 @@ import { AuthProviderEffect } from "./modules/admin/auth/AuthProviderEffect";
 import { LoginPage } from "./pages/admin/auth/LoginPage";
 import { MoviesAdminPage } from "./pages/admin/movies/MoviesAdminPage";
 import { CreateMoviePage } from "./pages/admin/movies/CreateMoviePage";
+import { EditMoviePage } from "./pages/admin/movies/EditMoviePage";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,6 +33,7 @@ const App = () => (
             <Route element={<AdminDashboardLayout />}>
               <Route path="movies" element={<MoviesAdminPage />} />
               <Route path="create-movie" element={<CreateMoviePage />} />
+              <Route path="edit-movie/:id" element={<EditMoviePage />} />
             </Route>
           </Route>
         </Route>

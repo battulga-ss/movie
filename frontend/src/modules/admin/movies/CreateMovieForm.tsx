@@ -1,11 +1,5 @@
-import { Button } from "@/components/ui/button";
+import { MovieForm } from "./MovieForm";
 
 export const CreateMovieForm = () => {
-  return (
-    <form className="space-y-4">
-      <Button type="submit" className="w-full">
-        Create Movie
-      </Button>
-    </form>
-  );
+  return <MovieForm submitLabel="Create Movie" />;
 };

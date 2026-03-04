@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMovies } from "@/modules/movies/hooks/useMovies";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export const MoviesView = () => {
   const [page, setPage] = useState(1);
@@ -34,7 +35,11 @@ export const MoviesView = () => {
           <tbody className="divide-y">
             {data?.movies.map(movie => (
               <tr key={movie._id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 font-medium">{movie.title}</td>
+                <td className="px-4 py-3 font-medium">
+                  <Link to={`/admin/edit-movie/${movie._id}`} className="hover:underline">
+                    {movie.title}
+                  </Link>
+                </td>
                 <td className="px-4 py-3 text-gray-500">{movie.year}</td>
                 <td className="px-4 py-3 text-gray-500">
                   {movie.genres?.join(", ")}
