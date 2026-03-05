@@ -58,3 +58,13 @@ export const getMovieById = async (
     res.status(500).json({ message: "Server error" });
   }
 };
+export const addMovie = async (req: Request, res: Response) => {
+  let { title, year, genre} = req.body;
+
+  await Movie.insertMany({
+    title,
+    year,
+    genre,
+  });
+  res.json({ success: true });
+};
