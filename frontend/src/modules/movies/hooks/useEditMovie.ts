@@ -12,11 +12,11 @@ export type MovieInput = {
   poster?: string;
 };
 
-export const useMovieAdd = () => {
+export const useEditMovie = () => {
   return useMutation({
-    mutationFn: async (data: MovieInput) => {
-      const res = await axios.post(
-        "http://localhost:3000/api/movies/create-movie",
+    mutationFn: async ({ id, data }: { id: string; data: MovieInput }) => {
+      const res = await axios.put(
+        `http://localhost:3000/api/movies/edit-movie/${id}`,
         data,
       );
       return res.data;
