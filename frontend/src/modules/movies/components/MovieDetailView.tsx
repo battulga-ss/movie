@@ -8,7 +8,7 @@ import {
   Trophy,
   Users,
   Pen,
-  Video
+  Video,
 } from "lucide-react";
 import { useMovie } from "@/modules/movies/hooks/useMovie";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ const DetailSkeleton = () => (
           <Skeleton className="h-5 w-1/2" />
           <Skeleton className="h-5 w-1/3" />
           <div className="flex gap-2">
-            {[1, 2, 3].map(i => (
+            {[1, 2, 3].map((i) => (
               <Skeleton key={i} className="h-6 w-16 rounded-full" />
             ))}
           </div>
@@ -42,7 +42,7 @@ const DetailSkeleton = () => (
 const InfoRow = ({
   icon,
   label,
-  value
+  value,
 }: {
   icon: React.ReactNode;
   label: string;
@@ -174,7 +174,7 @@ const MovieDetailView = () => {
 
             {movie.genres && movie.genres.length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {movie.genres.map(g => (
+                {movie.genres.map((g) => (
                   <Badge key={g} variant="secondary">
                     {g}
                   </Badge>
@@ -231,26 +231,6 @@ const MovieDetailView = () => {
                 )}
               </div>
             ) : null}
-
-            {movie.tomatoes?.viewer?.rating && (
-              <div className="pt-2 border-t">
-                <span className="text-muted-foreground text-xs uppercase tracking-wider block mb-1">
-                  Rotten Tomatoes Audience
-                </span>
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🍅</span>
-                  <span className="text-lg font-semibold">
-                    {movie.tomatoes.viewer.rating}/5
-                  </span>
-                  {movie.tomatoes.viewer.numReviews && (
-                    <span className="text-muted-foreground text-sm">
-                      ({movie.tomatoes.viewer.numReviews.toLocaleString()}{" "}
-                      reviews)
-                    </span>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </main>

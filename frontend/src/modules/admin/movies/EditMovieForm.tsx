@@ -1,13 +1,15 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEditMovie } from "@/modules/movies/hooks/useEditMovie";
+import { useDeleteMovie } from "@/modules/movies/hooks/useDeleteMovie";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import * as z from "zod";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 export type MovieInput = {
   title: string;
   year: number;
@@ -18,6 +20,7 @@ export type MovieInput = {
   plot: string;
   poster?: string;
 };
+
 export const movieSchema = z.object({
   title: z.string().min(1, "Title is required"),
   year: z.coerce.number().min(1900, "Invalid year"),
@@ -32,8 +35,12 @@ type FormType = z.infer<typeof movieSchema>;
 
 export const EditMovieForm = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
   const [movie, setMovie] = useState<FormType | null>(null);
+
   const { mutate, isPending } = useEditMovie();
+  const { mutate: deleteMovie, isPending: isDeleting } = useDeleteMovie();
 
   useEffect(() => {
     if (id) {
@@ -41,12 +48,13 @@ export const EditMovieForm = () => {
         .get(`http://localhost:3000/api/movies/${id}`)
         .then((res) => {
           const m = res.data;
+
           setMovie({
             title: m.title,
             year: m.year,
-            genre: m.genre?.join(",") || "",
+            genre: m.genres?.join(",") || "",
             runtime: m.runtime,
-            director: m.director?.join(",") || "",
+            director: m.directors?.join(",") || "",
             cast: m.cast?.join(",") || "",
             plot: m.plot,
           });
@@ -71,17 +79,37 @@ export const EditMovieForm = () => {
   useEffect(() => {
     if (movie) form.reset(movie);
   }, [movie]);
-
   const onSubmit = (data: FormType) => {
-    mutate({
-      id: id!,
-      data: {
-        ...data,
-        genre: data.genre.split(","),
-        director: data.director.split(","),
-        cast: data.cast.split(","),
+    if (!id) return;
+
+    mutate(
+      {
+        id,
+        data: {
+          ...data,
+          genre: data.genre.split(","),
+          director: data.director.split(","),
+          cast: data.cast.split(","),
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          alert("AMJILTTAI EDIT HIIGDLEE");
+        },
+      },
+    );
+  };
+
+  const handleDelete = () => {
+    if (!id) return;
+
+    if (confirm("are u sure????")) {
+      deleteMovie(id, {
+        onSuccess: () => {
+          navigate("/admin/movies");
+        },
+      });
+    }
   };
 
   if (!movie) return <div>Loading...</div>;
@@ -99,6 +127,7 @@ export const EditMovieForm = () => {
           </Field>
         )}
       />
+
       <Controller
         name="year"
         control={form.control}
@@ -110,6 +139,7 @@ export const EditMovieForm = () => {
           </Field>
         )}
       />
+
       <Controller
         name="genre"
         control={form.control}
@@ -121,17 +151,19 @@ export const EditMovieForm = () => {
           </Field>
         )}
       />
+
       <Controller
         name="runtime"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>⏱️ Runtime</FieldLabel>
+            <FieldLabel>⏱ Runtime</FieldLabel>
             <Input {...field} type="number" />
             {fieldState.error && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
       />
+
       <Controller
         name="director"
         control={form.control}
@@ -143,6 +175,7 @@ export const EditMovieForm = () => {
           </Field>
         )}
       />
+
       <Controller
         name="cast"
         control={form.control}
@@ -154,6 +187,7 @@ export const EditMovieForm = () => {
           </Field>
         )}
       />
+
       <Controller
         name="plot"
         control={form.control}
@@ -168,6 +202,16 @@ export const EditMovieForm = () => {
 
       <Button type="submit" disabled={isPending} className="w-full">
         {isPending ? "Saving..." : "Save Changes"}
+      </Button>
+
+      <Button
+        type="button"
+        variant="destructive"
+        className="w-full"
+        onClick={handleDelete}
+        disabled={isDeleting}
+      >
+        {isDeleting ? "Deleting..." : "Delete Movie"}
       </Button>
     </form>
   );

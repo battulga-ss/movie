@@ -4,35 +4,35 @@ const imdbSchema = new Schema(
   {
     rating: { type: Number },
     votes: { type: Number },
-    id: { type: Number }
+    id: { type: Number },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const viewerSchema = new Schema(
   {
     rating: { type: Number },
-    numReviews: { type: Number }
+    numReviews: { type: Number },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const tomatoesSchema = new Schema(
   {
     viewer: { type: viewerSchema },
     fresh: { type: Number },
-    rotten: { type: Number }
+    rotten: { type: Number },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const awardsSchema = new Schema(
   {
     wins: { type: Number },
     nominations: { type: Number },
-    text: { type: String }
+    text: { type: String },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const movieSchema = new Schema(
@@ -41,6 +41,8 @@ const movieSchema = new Schema(
     year: { type: Number },
     runtime: { type: Number },
     genres: { type: [String] },
+    writers: { type: [String] },
+
     directors: { type: [String] },
     cast: { type: [String] },
     plot: { type: String },
@@ -53,11 +55,12 @@ const movieSchema = new Schema(
     tomatoes: { type: tomatoesSchema },
     awards: { type: awardsSchema },
     released: { type: Date },
-    type: { type: String }
+    type: { type: String },
   },
   {
-    collection: "movies"
-  }
+    collection: "movies",
+    timestamps: true,
+  },
 );
 
 const Movie = model("Movie", movieSchema);

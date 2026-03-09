@@ -1,15 +1,27 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-
 export type MovieInput = {
   title: string;
   year: number;
-  genre: string[];
+  genres: string[]; // genre
   runtime: number;
-  director: string[];
+  directors: string[]; // director
   cast: string[];
   plot: string;
+  writers: string[];
   poster?: string;
+  languages?: string[];
+  countries?: string[];
+  rated?: string;
+  imdb?: {
+    rating?: number;
+    votes?: number;
+  };
+  awards?: {
+    wins?: number;
+    nominations?: number;
+    text?: string;
+  };
 };
 
 export const useMovieAdd = () => {

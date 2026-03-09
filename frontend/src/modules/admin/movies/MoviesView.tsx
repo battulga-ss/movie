@@ -33,22 +33,28 @@ export const MoviesView = () => {
             </tr>
           </thead>
           <tbody className="divide-y">
-            {data?.movies.map(movie => (
-              <tr key={movie._id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 font-medium">
-                  <Link to={`/admin/edit-movie/${movie._id}`} className="hover:underline">
-                    {movie.title}
-                  </Link>
-                </td>
-                <td className="px-4 py-3 text-gray-500">{movie.year}</td>
-                <td className="px-4 py-3 text-gray-500">
-                  {movie.genres?.join(", ")}
-                </td>
-                <td className="px-4 py-3 text-gray-500">
-                  {movie.imdb?.rating ?? "—"}
-                </td>
-              </tr>
-            ))}
+            {data?.movies
+              ?.slice()
+
+              .map((movie) => (
+                <tr key={movie._id} className="hover:bg-gray-50">
+                  <td className="px-4 py-3 font-medium">
+                    <Link
+                      to={`/admin/edit-movie/${movie._id}`}
+                      className="hover:underline"
+                    >
+                      {movie.title}
+                    </Link>
+                  </td>
+                  <td className="px-4 py-3 text-gray-500">{movie.year}</td>
+                  <td className="px-4 py-3 text-gray-500">
+                    {movie.genres?.join(", ")}
+                  </td>
+                  <td className="px-4 py-3 text-gray-500">
+                    {movie.imdb?.rating ?? "—"}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
@@ -62,7 +68,7 @@ export const MoviesView = () => {
             variant="outline"
             size="sm"
             disabled={page === 1}
-            onClick={() => setPage(p => p - 1)}
+            onClick={() => setPage((p) => p - 1)}
           >
             Previous
           </Button>
@@ -70,7 +76,7 @@ export const MoviesView = () => {
             variant="outline"
             size="sm"
             disabled={page === data?.totalPages}
-            onClick={() => setPage(p => p + 1)}
+            onClick={() => setPage((p) => p + 1)}
           >
             Next
           </Button>

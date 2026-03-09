@@ -19,6 +19,7 @@ export const getMovies = async (req: Request, res: Response): Promise<void> => {
 
     const [movies, total] = await Promise.all([
       Movie.find(filter)
+        .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
         .select(
@@ -59,14 +60,46 @@ export const getMovieById = async (
   }
 };
 export const addMovie = async (req: Request, res: Response) => {
-  let { title, year, genre } = req.body;
+  try {
+    const {
+      title,
+      year,
+      genres,
+      runtime,
+      directors,
+      cast,
+      plot,
+      poster,
+      writers,
+      languages,
+      countries,
+      rated,
+      imdb,
+      awards,
+    } = req.body;
 
-  await Movie.insertMany({
-    title,
-    year,
-    genre,
-  });
-  res.json({ success: true });
+    const newMovie = await Movie.create({
+      title,
+      year,
+      genres,
+      runtime,
+      directors,
+      cast,
+      plot,
+      poster,
+      writers,
+      languages,
+      countries,
+      rated,
+      imdb,
+      awards,
+    });
+
+    res.status(201).json({ success: true, movie: newMovie });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
 
 export const editMovie = async (req: Request, res: Response) => {
@@ -93,5 +126,16 @@ export const editMovie = async (req: Request, res: Response) => {
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ message: err.message || "Server error" });
+  }
+};
+export const deleteMovie = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    await Movie.findByIdAndDelete(id);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 };

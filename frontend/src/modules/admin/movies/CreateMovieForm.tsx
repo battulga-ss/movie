@@ -1,4 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMovieAdd } from "@/modules/movies/hooks/useMovieAdd";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
@@ -6,131 +7,140 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import * as z from "zod";
 
+// Schema-г бүх талбаруудыг хамруулж шинэчилсэн
 export const movieSchema = z.object({
   title: z.string().min(1, "Title is required"),
   year: z.coerce.number().min(1900, "Invalid year"),
-  genre: z.string().min(1, "Genre is required"),
-  runtime: z.coerce.number().min(1, "Runtime is required"),
-  director: z.string().min(1, "Director is required"),
-  cast: z.string().min(1, "Cast is required"),
+  genres: z.string().min(1, "Genres required (comma separated)"),
+  runtime: z.coerce.number().min(1, "Runtime required"),
+  directors: z.string().min(1, "Directors required (comma separated)"),
+  cast: z.string().min(1, "Cast required (comma separated)"),
+  writers: z.string().min(1, "Writers required (comma separated)"),
   plot: z.string().min(1, "Plot is required"),
+  fullplot: z.string().optional(),
+  poster: z.string().optional(),
+  languages: z.string().optional(),
+  countries: z.string().optional(),
+  rated: z.string().optional(),
+  imdbRating: z.string().optional(),
+  imdbVotes: z.string().optional(),
+  awardsText: z.string().optional(),
 });
 
 type FormType = z.infer<typeof movieSchema>;
 
 export const CreateMovieForm = () => {
+  const [success, setSuccess] = useState("");
   const { mutate, isPending } = useMovieAdd();
 
   const form = useForm<FormType>({
     resolver: zodResolver(movieSchema),
     defaultValues: {
       title: "",
-      year: 12,
-
-      genre: "",
+      year: 2024,
+      genres: "",
       runtime: 120,
-      director: "",
+      directors: "",
       cast: "",
+      writers: "",
       plot: "",
+      fullplot: "",
+      poster: "",
+      languages: "",
+      countries: "",
+      rated: "",
+      imdbRating: undefined,
+      imdbVotes: undefined,
+      awardsText: "",
     },
   });
 
   const onSubmit = (data: FormType) => {
-    mutate({
-      title: data.title,
-      year: data.year,
-      genre: [data.genre],
-      runtime: Number(data.runtime),
-      director: data.director.split(","),
-      cast: data.cast.split(","),
-      plot: data.plot,
-    });
+    mutate(
+      {
+        title: data.title,
+        year: data.year,
+        genres: data.genres.split(",").map((g) => g.trim()),
+        runtime: data.runtime,
+        directors: data.directors.split(",").map((d) => d.trim()),
+        cast: data.cast.split(",").map((c) => c.trim()),
+        writers: data.writers.split(",").map((w) => w.trim()),
+        plot: data.plot,
+        poster: data.poster,
+        languages: data.languages?.split(",").map((l) => l.trim()) || [],
+        countries: data.countries?.split(",").map((c) => c.trim()) || [],
+        rated: data.rated,
+        imdb: {
+          rating: data.imdbRating ? Number(data.imdbRating) : undefined,
+          votes: data.imdbVotes ? Number(data.imdbVotes) : undefined,
+        },
+        awards: {
+          text: data.awardsText,
+        },
+      },
+      {
+        onSuccess: () => {
+          setSuccess("Movie created successfully");
+          form.reset();
+          setTimeout(() => setSuccess(""), 4000);
+        },
+      },
+    );
   };
+
+  const renderField = (
+    name: keyof FormType,
+    label: string,
+    placeholder?: string,
+    type: string = "text",
+  ) => (
+    <Controller
+      name={name}
+      control={form.control}
+      render={({ field, fieldState }) => (
+        <Field data-invalid={fieldState.invalid}>
+          <FieldLabel>{label}</FieldLabel>
+          <Input {...field} placeholder={placeholder} type={type} />
+          {fieldState.error && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
+  );
+
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-      <Controller
-        name="title"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>📝 Title</FieldLabel>
-            <Input {...field} />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+      {success && (
+        <div className="text-green-500 font-medium text-sm">{success}</div>
+      )}
 
-      <Controller
-        name="year"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>📅 Year</FieldLabel>
-            <Input {...field} type="number" />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+      {renderField("title", "📝 Title")}
+      {renderField("year", "📅 Year", undefined, "number")}
+      {renderField("genres", "🎭 Genres (comma separated)", "Action,Comedy")}
+      {renderField("runtime", "⏱️ Runtime (minutes)", "120", "number")}
+      {renderField(
+        "directors",
+        "🎬 Directors (comma separated)",
+        "Director1,Director2",
+      )}
+      {renderField("cast", "👥 Cast (comma separated)", "Actor1,Actor2")}
+      {renderField(
+        "writers",
+        "✍️ Writers (comma separated)",
+        "Writer1,Writer2",
+      )}
+      {renderField("plot", "📝 Plot")}
 
-      <Controller
-        name="genre"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>🎭 Genre</FieldLabel>
-            <Input {...field} placeholder="Action" />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-
-      <Controller
-        name="runtime"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>⏱️ Runtime</FieldLabel>
-            <Input {...field} placeholder="120 min" />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-
-      <Controller
-        name="director"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>🎬 Director</FieldLabel>
-            <Input {...field} />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-
-      <Controller
-        name="cast"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>👥 Cast</FieldLabel>
-            <Input {...field} />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-
-      <Controller
-        name="plot"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>📝 Plot</FieldLabel>
-            <Input {...field} placeholder="Plot description" />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+      {renderField("poster", "Poster URL")}
+      {renderField(
+        "languages",
+        "Languages (comma separated)",
+        "English,French",
+      )}
+      {renderField("countries", "Countries (comma separated)", "USA,UK")}
+      {renderField("rated", "Rated (optional)", "PG-13")}
+      {renderField("imdbRating", "IMDb Rating (optional)", "7.5", "number")}
+      {renderField("imdbVotes", "IMDb Votes (optional)", "12345", "number")}
+      {renderField("awardsText", "Awards (optional)", "Best Picture")}
 
       <Button type="submit" disabled={isPending} className="w-full">
         {isPending ? "Creating..." : "Create Movie"}
