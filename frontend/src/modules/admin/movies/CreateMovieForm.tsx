@@ -108,43 +108,44 @@ export const CreateMovieForm = () => {
   );
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-      {success && (
-        <div className="text-green-500 font-medium text-sm">{success}</div>
-      )}
+   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 
-      {renderField("title", "📝 Title")}
-      {renderField("year", "📅 Year", undefined, "number")}
-      {renderField("genres", "🎭 Genres (comma separated)", "Action,Comedy")}
-      {renderField("runtime", "⏱️ Runtime (minutes)", "120", "number")}
-      {renderField(
-        "directors",
-        "🎬 Directors (comma separated)",
-        "Director1,Director2",
-      )}
-      {renderField("cast", "👥 Cast (comma separated)", "Actor1,Actor2")}
-      {renderField(
-        "writers",
-        "✍️ Writers (comma separated)",
-        "Writer1,Writer2",
-      )}
-      {renderField("plot", "📝 Plot")}
+  {success && (
+    <div className="text-green-500 font-medium text-sm">
+      {success}
+    </div>
+  )}
 
-      {renderField("poster", "Poster URL")}
-      {renderField(
-        "languages",
-        "Languages (comma separated)",
-        "English,French",
-      )}
-      {renderField("countries", "Countries (comma separated)", "USA,UK")}
-      {renderField("rated", "Rated (optional)", "PG-13")}
-      {renderField("imdbRating", "IMDb Rating (optional)", "7.5", "number")}
-      {renderField("imdbVotes", "IMDb Votes (optional)", "12345", "number")}
-      {renderField("awardsText", "Awards (optional)", "Best Picture")}
+  <div className="grid grid-cols-4 gap-4">
 
-      <Button type="submit" disabled={isPending} className="w-full">
-        {isPending ? "Creating..." : "Create Movie"}
-      </Button>
-    </form>
+    {renderField("title", "Title")}
+    {renderField("year", "Year", undefined, "number")}
+    {renderField("runtime", "Runtime", "120", "number")}
+    {renderField("rated", "Rated")}
+
+    {renderField("genres", "Genres", "Action,Comedy")}
+    {renderField("languages", "Languages", "English,French")}
+    {renderField("countries", "Countries", "USA,UK")}
+    {renderField("poster", "Poster URL")}
+
+    {renderField("directors", "Directors", "Director1,Director2")}
+    {renderField("writers", "Writers", "Writer1,Writer2")}
+    {renderField("imdbRating", "IMDb Rating", "7.5", "number")}
+    {renderField("imdbVotes", "IMDb Votes", "12345", "number")}
+
+  </div>
+
+  <div className="grid grid-cols-2 gap-4">
+    {renderField("cast", "Cast", "Actor1,Actor2")}
+    {renderField("awardsText", "Awards")}
+  </div>
+
+  {renderField("plot", "Plot")}
+
+  <Button type="submit" disabled={isPending} className="w-full">
+    {isPending ? "Creating..." : "Create Movie"}
+  </Button>
+
+</form>
   );
 };

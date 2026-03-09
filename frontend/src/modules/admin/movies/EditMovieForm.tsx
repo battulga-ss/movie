@@ -115,104 +115,110 @@ export const EditMovieForm = () => {
   if (!movie) return <div>Loading...</div>;
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-      <Controller
-        name="title"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>📝 Title</FieldLabel>
-            <Input {...field} />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+    <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-3">
 
-      <Controller
-        name="year"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>📅 Year</FieldLabel>
-            <Input {...field} type="number" />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+  <Controller
+    name="title"
+    control={form.control}
+    render={({ field, fieldState }) => (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel>📝 Title</FieldLabel>
+        <Input {...field} />
+        {fieldState.error && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    )}
+  />
 
-      <Controller
-        name="genre"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>🎭 Genre</FieldLabel>
-            <Input {...field} placeholder="Action,Drama" />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+  <Controller
+    name="year"
+    control={form.control}
+    render={({ field, fieldState }) => (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel>📅 Year</FieldLabel>
+        <Input {...field} type="number" />
+        {fieldState.error && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    )}
+  />
 
-      <Controller
-        name="runtime"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>⏱ Runtime</FieldLabel>
-            <Input {...field} type="number" />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+  <Controller
+    name="genre"
+    control={form.control}
+    render={({ field, fieldState }) => (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel>🎭 Genre</FieldLabel>
+        <Input {...field} placeholder="Action,Drama" />
+        {fieldState.error && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    )}
+  />
 
-      <Controller
-        name="director"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>🎬 Director</FieldLabel>
-            <Input {...field} placeholder="Director1,Director2" />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+  <Controller
+    name="runtime"
+    control={form.control}
+    render={({ field, fieldState }) => (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel>⏱ Runtime</FieldLabel>
+        <Input {...field} type="number" />
+        {fieldState.error && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    )}
+  />
 
-      <Controller
-        name="cast"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>👥 Cast</FieldLabel>
-            <Input {...field} placeholder="Actor1,Actor2" />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+  <Controller
+    name="director"
+    control={form.control}
+    render={({ field, fieldState }) => (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel>🎬 Director</FieldLabel>
+        <Input {...field} placeholder="Director1,Director2" />
+        {fieldState.error && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    )}
+  />
 
-      <Controller
-        name="plot"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel>📝 Plot</FieldLabel>
-            <Input {...field} placeholder="Plot description" />
-            {fieldState.error && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+  <Controller
+    name="cast"
+    control={form.control}
+    render={({ field, fieldState }) => (
+      <Field data-invalid={fieldState.invalid}>
+        <FieldLabel>👥 Cast</FieldLabel>
+        <Input {...field} placeholder="Actor1,Actor2" />
+        {fieldState.error && <FieldError errors={[fieldState.error]} />}
+      </Field>
+    )}
+  />
 
-      <Button type="submit" disabled={isPending} className="w-full">
-        {isPending ? "Saving..." : "Save Changes"}
-      </Button>
+  <div className="col-span-2">
+    <Controller
+      name="plot"
+      control={form.control}
+      render={({ field, fieldState }) => (
+        <Field data-invalid={fieldState.invalid}>
+          <FieldLabel>📝 Plot</FieldLabel>
+          <Input {...field} placeholder="Plot description" />
+          {fieldState.error && <FieldError errors={[fieldState.error]} />}
+        </Field>
+      )}
+    />
+  </div>
 
-      <Button
-        type="button"
-        variant="destructive"
-        className="w-full"
-        onClick={handleDelete}
-        disabled={isDeleting}
-      >
-        {isDeleting ? "Deleting..." : "Delete Movie"}
-      </Button>
-    </form>
+  <div className="col-span-2 space-y-2">
+    <Button type="submit" disabled={isPending} className="w-full">
+      {isPending ? "Saving..." : "Save Changes"}
+    </Button>
+
+    <Button
+      type="button"
+      variant="destructive"
+      className="w-full"
+      onClick={handleDelete}
+      disabled={isDeleting}
+    >
+      {isDeleting ? "Deleting..." : "Delete Movie"}
+    </Button>
+  </div>
+
+</form>
   );
 };
