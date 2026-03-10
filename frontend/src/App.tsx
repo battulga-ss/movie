@@ -14,9 +14,9 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5,
-      retry: 1
-    }
-  }
+      retry: 1,
+    },
+  },
 });
 
 const App = () => (
@@ -24,6 +24,7 @@ const App = () => (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MoviesPage />} />
+        <Route path="/movies" element={<MoviesPage />} />
         <Route path="/movies/:id" element={<MovieDetailPage />} />
 
         <Route path="admin" element={<AdminLayout />}>

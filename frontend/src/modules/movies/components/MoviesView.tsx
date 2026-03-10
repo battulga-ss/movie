@@ -18,14 +18,14 @@ const GENRES = [
   "Animation",
   "Documentary",
   "Crime",
-  "Sci-Fi"
+  "Sci-Fi",
 ];
 
 const MoviesView = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState(
-    searchParams.get("search") ?? ""
+    searchParams.get("search") ?? "",
   );
 
   const page = Number(searchParams.get("page") ?? "1");
@@ -36,7 +36,7 @@ const MoviesView = () => {
     page,
     limit: 20,
     search: search || undefined,
-    genre: selectedGenre || undefined
+    genre: selectedGenre || undefined,
   });
 
   const movies = data?.movies ?? [];
@@ -61,6 +61,7 @@ const MoviesView = () => {
             <Film className="w-6 h-6" />
             <span className="text-xl font-bold tracking-tight">Movies</span>
           </div>
+
           <form onSubmit={handleSearch} className="flex gap-2 flex-1 max-w-lg">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -68,17 +69,23 @@ const MoviesView = () => {
                 type="text"
                 placeholder="Search movies..."
                 value={searchInput}
-                onChange={e => setSearchInput(e.target.value)}
+                onChange={(e) => setSearchInput(e.target.value)}
                 className="pl-9"
               />
             </div>
             <Button type="submit">Search</Button>
           </form>
+
           {total > 0 && (
-            <span className="text-muted-foreground text-sm ml-auto hidden md:block">
+            <span className="text-muted-foreground text-sm hidden md:block">
               {total.toLocaleString()} movies
             </span>
           )}
+
+          {/* ADMIN LOGIN BUTTON */}
+          <Button variant="outline" onClick={() => navigate("/admin/login")}>
+            Admin
+          </Button>
         </div>
       </header>
 
@@ -92,7 +99,8 @@ const MoviesView = () => {
           >
             All
           </Button>
-          {GENRES.map(genre => (
+
+          {GENRES.map((genre) => (
             <Button
               key={genre}
               variant={selectedGenre === genre ? "default" : "outline"}
@@ -147,7 +155,7 @@ const MoviesView = () => {
             ? Array.from({ length: 20 }).map((_, i) => (
                 <MovieCardSkeleton key={i} />
               ))
-            : movies.map(movie => (
+            : movies.map((movie) => (
                 <MovieCard
                   key={movie._id}
                   movie={movie}
@@ -174,7 +182,7 @@ const MoviesView = () => {
                 setSearchParams({
                   search,
                   genre: selectedGenre,
-                  page: String(page - 1)
+                  page: String(page - 1),
                 })
               }
               disabled={page === 1}
@@ -182,16 +190,18 @@ const MoviesView = () => {
               <ChevronLeft className="w-4 h-4 mr-1" />
               Previous
             </Button>
+
             <span className="text-muted-foreground text-sm">
               Page {page} of {totalPages}
             </span>
+
             <Button
               variant="outline"
               onClick={() =>
                 setSearchParams({
                   search,
                   genre: selectedGenre,
-                  page: String(page + 1)
+                  page: String(page + 1),
                 })
               }
               disabled={page === totalPages}

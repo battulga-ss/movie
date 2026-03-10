@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import * as z from "zod";
 
-// Schema-г бүх талбаруудыг хамруулж шинэчилсэн
 export const movieSchema = z.object({
   title: z.string().min(1, "Title is required"),
   year: z.coerce.number().min(1900, "Invalid year"),
@@ -108,44 +107,38 @@ export const CreateMovieForm = () => {
   );
 
   return (
-   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      {success && (
+        <div className="text-green-500 font-medium text-sm">{success}</div>
+      )}
 
-  {success && (
-    <div className="text-green-500 font-medium text-sm">
-      {success}
-    </div>
-  )}
+      <div className="grid grid-cols-4 gap-4">
+        {renderField("title", "Title")}
+        {renderField("year", "Year", undefined, "number")}
+        {renderField("runtime", "Runtime", "120", "number")}
+        {renderField("rated", "Rated")}
 
-  <div className="grid grid-cols-4 gap-4">
+        {renderField("genres", "Genres", "Action,Comedy")}
+        {renderField("languages", "Languages", "English,French")}
+        {renderField("countries", "Countries", "USA,UK")}
+        {renderField("poster", "Poster URL")}
 
-    {renderField("title", "Title")}
-    {renderField("year", "Year", undefined, "number")}
-    {renderField("runtime", "Runtime", "120", "number")}
-    {renderField("rated", "Rated")}
+        {renderField("directors", "Directors", "Director1,Director2")}
+        {renderField("writers", "Writers", "Writer1,Writer2")}
+        {renderField("imdbRating", "IMDb Rating", "7.5", "number")}
+        {renderField("imdbVotes", "IMDb Votes", "12345", "number")}
+      </div>
 
-    {renderField("genres", "Genres", "Action,Comedy")}
-    {renderField("languages", "Languages", "English,French")}
-    {renderField("countries", "Countries", "USA,UK")}
-    {renderField("poster", "Poster URL")}
+      <div className="grid grid-cols-2 gap-4">
+        {renderField("cast", "Cast", "Actor1,Actor2")}
+        {renderField("awardsText", "Awards")}
+      </div>
 
-    {renderField("directors", "Directors", "Director1,Director2")}
-    {renderField("writers", "Writers", "Writer1,Writer2")}
-    {renderField("imdbRating", "IMDb Rating", "7.5", "number")}
-    {renderField("imdbVotes", "IMDb Votes", "12345", "number")}
+      {renderField("plot", "Plot")}
 
-  </div>
-
-  <div className="grid grid-cols-2 gap-4">
-    {renderField("cast", "Cast", "Actor1,Actor2")}
-    {renderField("awardsText", "Awards")}
-  </div>
-
-  {renderField("plot", "Plot")}
-
-  <Button type="submit" disabled={isPending} className="w-full">
-    {isPending ? "Creating..." : "Create Movie"}
-  </Button>
-
-</form>
+      <Button type="submit" disabled={isPending} className="w-full">
+        {isPending ? "Creating..." : "Create Movie"}
+      </Button>
+    </form>
   );
 };
